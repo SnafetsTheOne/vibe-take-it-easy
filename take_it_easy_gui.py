@@ -176,7 +176,7 @@ class BoardGUI:
             px = x + size * math.cos(angle)
             py = y + size * math.sin(angle)
             points.extend([px, py])
-        fill_color = "#e0e0e0" if self.board.grid[row][col] is None else "#aee1f9"
+        fill_color = "#f7f7f7"  # very light gray for all tiles
         self.canvas.create_polygon(points, outline="black", fill=fill_color, width=2, tags=f"hex_{row}_{col}")
         tile = self.board.grid[row][col]
         if tile:
@@ -194,9 +194,17 @@ class BoardGUI:
             dr_color = diag_right_colors.get(tile.diag_right, "#ff69b4")
             self.canvas.create_line(x+size*0.7, y-size*0.4, x-size*0.7, y+size*0.4, fill=dr_color, width=5)
             # Draw numbers in matching colors
-            self.canvas.create_text(x, y, text=str(tile.vertical), font=("Arial", 14, "bold"), fill=v_color)
-            self.canvas.create_text(x - size/2.2, y - size/2.2, text=str(tile.diag_left), font=("Arial", 10), fill=dl_color)
-            self.canvas.create_text(x + size/2.2, y - size/2.2, text=str(tile.diag_right), font=("Arial", 10), fill=dr_color)
+            font = ("Arial", 16, "bold")
+            # Center positions for numbers
+            self.canvas.create_text(x, y - size * 0.65, text=str(tile.vertical), font=font, fill="black")
+            # Diagonal left: center between top left and bottom right
+            dl_x = x - size * 0.45
+            dl_y = y + size * 0.45
+            self.canvas.create_text(dl_x, dl_y, text=str(tile.diag_left), font=font, fill="black")
+            # Diagonal right: center between top right and bottom left
+            dr_x = x + size * 0.45
+            dr_y = y + size * 0.45
+            self.canvas.create_text(dr_x, dr_y, text=str(tile.diag_right), font=font, fill="black")
 
     def update_tile_label(self):
         if self.current_tile_idx < len(self.tiles):

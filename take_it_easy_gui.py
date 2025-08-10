@@ -84,8 +84,7 @@ class BoardGUI:
         self.update_tile_label()
         self.draw_current_tile()
         self.canvas.bind("<Button-1>", self.on_canvas_click)
-        self.score_button = tk.Button(root, text="Show Score", command=self.show_score)
-        self.score_button.pack()
+    # Removed Show Score button; score will update automatically
         self.score_label = tk.Label(root, text="Score: 0")
         self.score_label.pack()
     def show_score(self):
@@ -254,6 +253,9 @@ class BoardGUI:
             self.current_tile_idx += 1
             self.draw_board()
             self.update_tile_label()
+            # Automatically update score after every tile placement
+            score = self.calculate_score()
+            self.score_label.config(text=f"Score: {score}")
         else:
             self.info_label.config(text="Position already occupied!")
 

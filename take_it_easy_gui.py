@@ -41,45 +41,27 @@ class Board:
         return None
 
     def get_vertical_lines(self):
-        # Always return 5 vertical lines for a hexagonal board
-        lines = [[] for _ in range(5)]
-        center_row = len(self.rows) // 2
-        for row, count in enumerate(self.rows):
-            offset = (max(self.rows) - count) // 2
-            for col in range(count):
-                # The vertical line index for this tile
-                line_idx = col - offset
-                if 0 <= line_idx < 5:
-                    lines[line_idx].append((row, col))
-        return lines
+        # board: [1,2,3,2,3,2,3,2,1]
+        return [[(2,0), (4,0), (6, 0)]
+                , [(1,0), (3,0), (5, 0), (7, 0)]
+                , [(0,0), (2,1), (4,1), (6,1), (8,0)]
+                , [(1,1), (3,1), (5, 1), (7, 1)]
+                , [(2,2), (4,2), (6,2)]]
 
     def get_diagonal_left_lines(self):
-        lines = []
-        max_cols = max(self.rows)
-        for d in range(-max_cols+1, max_cols):
-            line = []
-            for row, count in enumerate(self.rows):
-                offset = (max_cols - count) // 2
-                c = row + d - offset
-                if 0 <= c < count:
-                    line.append((row, c))
-            if line:
-                lines.append(line)
-        return lines
+        # board: [1,2,3,2,3,2,3,2,1]
+        return [[(2,0), (1,0), (0,0)]
+                , [(4,0), (3,0), (2,1), (1,1)]
+                , [(6,0), (5,0), (4,1), (3,1), (2,2)]
+                , [(7,0), (6,1), (5,1), (4,2)]
+                , [(8,0), (7,1), (6,2)]]
 
     def get_diagonal_right_lines(self):
-        lines = []
-        max_cols = max(self.rows)
-        for d in range(-max_cols+1, max_cols):
-            line = []
-            for row, count in enumerate(self.rows):
-                offset = (max_cols - count) // 2
-                c = (count - 1) - (row + d - offset)
-                if 0 <= c < count:
-                    line.append((row, c))
-            if line:
-                lines.append(line)
-        return lines
+        return [[(0,0), (1,1), (2,2)]
+                , [(1,0), (2,1), (3,2), (4,2)]
+                , [(2,0), (3,1), (4,1), (5,2), (6,2)]
+                , [(4,0), (5,0), (6,1), (7,1)]
+                , [(6,0), (7,0), (8,0)]]
 
 class BoardGUI:
     def __init__(self, root):

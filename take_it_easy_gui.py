@@ -131,8 +131,8 @@ class BoardGUI:
 
     def generate_tiles(self, num_tiles):
         verticals = [1, 5, 9]
-        diag_lefts = [2, 4, 8]
-        diag_rights = [3, 6, 7]
+        diag_lefts = [2, 6, 7]
+        diag_rights = [3, 4, 8]
         all_tiles = []
         for v in verticals:
             for dl in diag_lefts:
@@ -186,13 +186,13 @@ class BoardGUI:
             diag_right_colors = {3: "#ff69b4", 8: "#ffa500", 4: "#00cfff"}
             # Draw vertical line
             v_color = vertical_colors.get(tile.vertical, "#888888")
-            self.canvas.create_line(x, y-size*0.8, x, y+size*0.8, fill=v_color, width=5)
-            # Draw diagonal left line
+            self.canvas.create_line(x, y-size*0.8, x, y+size*0.8, fill=v_color, width=10)
+            # Draw diagonal left line (now uses diagonal right coordinates)
             dl_color = diag_left_colors.get(tile.diag_left, "#ffb6c1")
-            self.canvas.create_line(x-size*0.7, y-size*0.4, x+size*0.7, y+size*0.4, fill=dl_color, width=5)
-            # Draw diagonal right line
+            self.canvas.create_line(x+size*0.7, y-size*0.4, x-size*0.7, y+size*0.4, fill=dl_color, width=10)
+            # Draw diagonal right line (now uses diagonal left coordinates)
             dr_color = diag_right_colors.get(tile.diag_right, "#ff69b4")
-            self.canvas.create_line(x+size*0.7, y-size*0.4, x-size*0.7, y+size*0.4, fill=dr_color, width=5)
+            self.canvas.create_line(x-size*0.7, y-size*0.4, x+size*0.7, y+size*0.4, fill=dr_color, width=10)
             # Draw numbers in matching colors
             font = ("Arial", 16, "bold")
             # Center positions for numbers
@@ -219,16 +219,37 @@ class BoardGUI:
             tile = self.tiles[self.current_tile_idx]
             x, y = 50, 50
             size = 35
+            # Draw hexagon
             points = []
             for i in range(6):
                 angle = math.pi / 3 * i
                 px = x + size * math.cos(angle)
                 py = y + size * math.sin(angle)
                 points.extend([px, py])
-            self.tile_canvas.create_polygon(points, outline="black", fill="#aee1f9", width=2)
-            self.tile_canvas.create_text(x, y, text=str(tile.vertical), font=("Arial", 14, "bold"))
-            self.tile_canvas.create_text(x - size/2.2, y - size/2.2, text=str(tile.diag_left), font=("Arial", 10))
-            self.tile_canvas.create_text(x + size/2.2, y - size/2.2, text=str(tile.diag_right), font=("Arial", 10))
+            fill_color = "#f7f7f7"
+            self.tile_canvas.create_polygon(points, outline="black", fill=fill_color, width=2)
+            # Color maps
+            vertical_colors = {1: "#888888", 5: "#0099ff", 9: "#ffe600"}
+            diag_left_colors = {2: "#ffb6c1", 7: "#90ee90", 6: "#ff0000"}
+            diag_right_colors = {3: "#ff69b4", 8: "#ffa500", 4: "#00cfff"}
+            # Draw vertical line
+            v_color = vertical_colors.get(tile.vertical, "#888888")
+            self.tile_canvas.create_line(x, y-size*0.8, x, y+size*0.8, fill=v_color, width=10)
+            # Draw diagonal left line (now uses diagonal right coordinates)
+            dl_color = diag_left_colors.get(tile.diag_left, "#ffb6c1")
+            self.tile_canvas.create_line(x+size*0.7, y-size*0.4, x-size*0.7, y+size*0.4, fill=dl_color, width=10)
+            # Draw diagonal right line (now uses diagonal left coordinates)
+            dr_color = diag_right_colors.get(tile.diag_right, "#ff69b4")
+            self.tile_canvas.create_line(x-size*0.7, y-size*0.4, x+size*0.7, y+size*0.4, fill=dr_color, width=10)
+            # Draw numbers in matching colors
+            font = ("Arial", 16, "bold")
+            self.tile_canvas.create_text(x, y - size * 0.65, text=str(tile.vertical), font=font, fill="black")
+            dl_x = x - size * 0.45
+            dl_y = y + size * 0.45
+            self.tile_canvas.create_text(dl_x, dl_y, text=str(tile.diag_left), font=font, fill="black")
+            dr_x = x + size * 0.45
+            dr_y = y + size * 0.45
+            self.tile_canvas.create_text(dr_x, dr_y, text=str(tile.diag_right), font=font, fill="black")
 
     def on_canvas_click(self, event):
         if self.current_tile_idx >= len(self.tiles):

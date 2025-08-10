@@ -3,6 +3,7 @@ Take It Easy - GUI Version (tkinter)
 """
 import tkinter as tk
 import random
+import math
 
 class Tile:
     def __init__(self, vertical, diag_left, diag_right):
@@ -11,12 +12,6 @@ class Tile:
         self.diag_right = diag_right
     def __repr__(self):
         return f"({self.vertical},{self.diag_left},{self.diag_right})"
-
-
-import math
-
-
-
 
 class Board:
     def __init__(self, rows):
@@ -41,7 +36,6 @@ class Board:
         return None
 
     def get_vertical_lines(self):
-        # board: [1,2,3,2,3,2,3,2,1]
         return [[(2,0), (4,0), (6, 0)]
                 , [(1,0), (3,0), (5, 0), (7, 0)]
                 , [(0,0), (2,1), (4,1), (6,1), (8,0)]
@@ -49,7 +43,6 @@ class Board:
                 , [(2,2), (4,2), (6,2)]]
 
     def get_diagonal_left_lines(self):
-        # board: [1,2,3,2,3,2,3,2,1]
         return [[(2,0), (1,0), (0,0)]
                 , [(4,0), (3,0), (2,1), (1,1)]
                 , [(6,0), (5,0), (4,1), (3,1), (2,2)]
@@ -112,9 +105,9 @@ class BoardGUI:
         self.update_tile_label()
         self.draw_current_tile()
         self.canvas.bind("<Button-1>", self.on_canvas_click)
-    # Removed Show Score button; score will update automatically
         self.score_label = tk.Label(root, text="Score: 0")
         self.score_label.pack()
+
     def show_score(self):
         score = self.calculate_score()
         self.score_label.config(text=f"Score: {score}")
